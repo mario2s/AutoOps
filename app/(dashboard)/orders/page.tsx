@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 interface Order {
@@ -30,7 +30,7 @@ interface OrdersResponse {
   }
 }
 
-export default function OrdersPage() {
+function OrdersContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const page = parseInt(searchParams.get('page') || '1', 10)
@@ -189,5 +189,13 @@ export default function OrdersPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-center">Loading orders...</div>}>
+      <OrdersContent />
+    </Suspense>
   )
 }

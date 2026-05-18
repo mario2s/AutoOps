@@ -42,7 +42,7 @@ export default function EditOrderPage() {
   const [parts, setParts] = useState<Part[]>([])
   const [services, setServices] = useState<Service[]>([])
   const [newPart, setNewPart] = useState({ partName: '', quantity: 1, unitPrice: '' })
-  const [newService, setNewService] = useState({ description: '', costType: 'fixed' as const, hours: '1', hourlyRate: '50', fixedCost: '' })
+  const [newService, setNewService] = useState<{ description: string; costType: 'hourly' | 'fixed'; hours: string; hourlyRate: string; fixedCost: string }>({ description: '', costType: 'fixed', hours: '1', hourlyRate: '50', fixedCost: '' })
 
   useEffect(() => {
     fetchOrderData()

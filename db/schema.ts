@@ -21,7 +21,9 @@ export const users = pgTable(
     status: varchar('status', { length: 50 }).notNull().default('pending'),
     createdAt: timestamp('created_at').notNull().defaultNow(),
   },
-  (table) => [index('idx_users_email').on(table.email)]
+  (table) => ({
+    idxUsersEmail: index('idx_users_email').on(table.email),
+  })
 )
 
 export const clients = pgTable(
@@ -34,7 +36,9 @@ export const clients = pgTable(
     notes: text('notes'),
     createdAt: timestamp('created_at').notNull().defaultNow(),
   },
-  (table) => [index('idx_clients_name').on(table.name)]
+  (table) => ({
+    idxClientsName: index('idx_clients_name').on(table.name),
+  })
 )
 
 export const vehicles = pgTable(
@@ -51,7 +55,9 @@ export const vehicles = pgTable(
     vin: varchar('vin', { length: 17 }),
     notes: text('notes'),
   },
-  (table) => [index('idx_vehicles_client_id').on(table.clientId)]
+  (table) => ({
+    idxVehiclesClientId: index('idx_vehicles_client_id').on(table.clientId),
+  })
 )
 
 export const orders = pgTable(
@@ -73,12 +79,12 @@ export const orders = pgTable(
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow(),
   },
-  (table) => [
-    index('idx_orders_status').on(table.status),
-    index('idx_orders_deadline').on(table.deadline),
-    index('idx_orders_mechanic_id').on(table.mechanicId),
-    index('idx_orders_client_id').on(table.clientId),
-  ]
+  (table) => ({
+    idxOrdersStatus: index('idx_orders_status').on(table.status),
+    idxOrdersDeadline: index('idx_orders_deadline').on(table.deadline),
+    idxOrdersMechanicId: index('idx_orders_mechanic_id').on(table.mechanicId),
+    idxOrdersClientId: index('idx_orders_client_id').on(table.clientId),
+  })
 )
 
 export const orderParts = pgTable(
@@ -92,7 +98,9 @@ export const orderParts = pgTable(
     quantity: integer('quantity').notNull().default(1),
     unitPrice: decimal('unit_price', { precision: 10, scale: 2 }).notNull(),
   },
-  (table) => [index('idx_order_parts_order_id').on(table.orderId)]
+  (table) => ({
+    idxOrderPartsOrderId: index('idx_order_parts_order_id').on(table.orderId),
+  })
 )
 
 export const orderServices = pgTable(
@@ -108,7 +116,9 @@ export const orderServices = pgTable(
     hourlyRate: decimal('hourly_rate', { precision: 10, scale: 2 }),
     fixedCost: decimal('fixed_cost', { precision: 10, scale: 2 }),
   },
-  (table) => [index('idx_order_services_order_id').on(table.orderId)]
+  (table) => ({
+    idxOrderServicesOrderId: index('idx_order_services_order_id').on(table.orderId),
+  })
 )
 
 export const usersRelations = relations(users, ({ many }) => ({

@@ -41,5 +41,5 @@ export async function getCurrentUser(): Promise<(typeof users.$inferSelect) | nu
   const session = await getSession()
   if (!session) return null
 
-  return getUser(session.id)
+  return (await getUser(session.id)) ?? null
 }

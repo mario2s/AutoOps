@@ -26,7 +26,8 @@ const versionFilePath = resolve(process.cwd(), 'lib/version.ts')
 
 try {
   const content = readFileSync(versionFilePath, 'utf-8')
-  const match = content.match(/export const APP_VERSION = ['"](.+?)['"]/`)
+  const match = content.match(/export const APP_VERSION = ['"](.+?)['"]/)
+
 
   if (!match) {
     throw new Error('Could not find APP_VERSION in lib/version.ts')

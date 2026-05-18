@@ -8,6 +8,7 @@ export interface TokenPayload {
   email: string
   role: string
   status: string
+  [key: string]: unknown
 }
 
 export async function signToken(payload: TokenPayload): Promise<string> {

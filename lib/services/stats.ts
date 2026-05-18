@@ -89,7 +89,7 @@ export async function getRevenueTimeSeries(days: number = 30) {
     },
   })
 
-  const revenueByDay = new Map<string, Decimal>()
+  const revenueByDay = new Map<string, InstanceType<typeof Decimal>>()
 
   allOrders.forEach((order) => {
     const dateKey = new Date(order.createdAt).toISOString().split('T')[0]
