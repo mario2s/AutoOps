@@ -63,9 +63,9 @@ export default function NewOrderPage() {
 
   const fetchClients = async () => {
     try {
-      const response = await fetch('/api/clients?limit=1000')
+      const response = await fetch('/api/clients?page=1&search=')
       const data = await response.json()
-      setClients(data.clients || [])
+      setClients(data.data || [])
     } catch (err) {
       setError('Failed to load clients')
     } finally {

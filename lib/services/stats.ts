@@ -4,7 +4,11 @@ import { eq, count, sql } from 'drizzle-orm'
 import Decimal from 'decimal.js'
 
 export async function getDashboardStats() {
-  const totalOrders = await db.$count(orders)
+  const countResult = await db
+    .select({ value: count() })
+    .from(orders)
+
+  const totalOrders = countResult[0]?.value || 0
 
   const ordersByStatus = await db
     .select({

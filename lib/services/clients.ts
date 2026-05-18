@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { clients, vehicles } from '@/db/schema'
-import { eq, desc, and, like, SQL } from 'drizzle-orm'
+import { eq, desc, and, like, SQL, count } from 'drizzle-orm'
 
 const PAGE_SIZE = 20
 
@@ -46,10 +46,12 @@ export async function getClients(
     offset,
   })
 
-  const totalCount = await db.$count(
-    clients,
-    whereConditions.length > 0 ? and(...whereConditions) : undefined
-  )
+  const countResult = await db
+    .select({ value: count() })
+    .from(clients)
+    .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
+
+  const totalCount = countResult[0]?.value || 0
 
   return {
     data,

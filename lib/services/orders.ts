@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { orders, orderParts, orderServices, vehicles, clients } from '@/db/schema'
-import { eq, desc, SQL, and, like } from 'drizzle-orm'
+import { eq, desc, SQL, and, like, count } from 'drizzle-orm'
 import Decimal from 'decimal.js'
 
 const PAGE_SIZE = 20
@@ -52,39 +52,54 @@ export async function getOrders(
     whereConditions.push(like(orders.notes, `%${search}%`))
   }
 
-  const data = await db.query.orders.findMany({
-    where: whereConditions.length > 0 ? and(...whereConditions) : undefined,
-    with: {
-      vehicle: {
-        with: {
-          client: true,
+  try {
+    const data = await db.query.orders.findMany({
+      where: whereConditions.length > 0 ? and(...whereConditions) : undefined,
+      with: {
+        vehicle: {
+          with: {
+            client: true,
+          },
         },
+        mechanic: true,
+        parts: true,
+        services: true,
       },
-      mechanic: true,
-      parts: true,
-      services: true,
-    },
-    orderBy: [desc(orders.createdAt)],
-    limit: PAGE_SIZE,
-    offset,
-  })
+      orderBy: [desc(orders.createdAt)],
+      limit: PAGE_SIZE,
+      offset,
+    })
 
-  const totalCount = await db.$count(
-    orders,
-    whereConditions.length > 0 ? and(...whereConditions) : undefined
-  )
+    const countResult = await db
+      .select({ value: count() })
+      .from(orders)
+      .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
 
-  return {
-    data: data.map((order) => ({
-      ...order,
-      totals: computeOrderTotals(order),
-    })),
-    pagination: {
-      page,
-      pageSize: PAGE_SIZE,
-      total: totalCount,
-      pages: Math.ceil(totalCount / PAGE_SIZE),
-    },
+    const totalCount = countResult[0]?.value || 0
+
+    return {
+      data: data.map((order) => ({
+        ...order,
+        totals: computeOrderTotals(order),
+      })),
+      pagination: {
+        page,
+        pageSize: PAGE_SIZE,
+        total: totalCount,
+        pages: Math.ceil(totalCount / PAGE_SIZE),
+      },
+    }
+  } catch (error) {
+    console.error('Error in getOrders:', error)
+    return {
+      data: [],
+      pagination: {
+        page,
+        pageSize: PAGE_SIZE,
+        total: 0,
+        pages: 0,
+      },
+    }
   }
 }
 
