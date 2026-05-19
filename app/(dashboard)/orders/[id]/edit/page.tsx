@@ -132,12 +132,13 @@ export default function EditOrderPage() {
     }
 
     try {
+      const costType = newService.costType
       const payload = {
         description: newService.description,
-        costType: newService.costType,
-        hours: newService.costType === 'hourly' ? newService.hours : null,
-        hourlyRate: newService.costType === 'hourly' ? newService.hourlyRate : null,
-        fixedCost: newService.costType === 'fixed' ? newService.fixedCost : null,
+        costType,
+        hours: costType === 'hourly' ? newService.hours : null,
+        hourlyRate: costType === 'hourly' ? newService.hourlyRate : null,
+        fixedCost: costType === 'fixed' ? newService.fixedCost : null,
       }
 
       const response = await fetch(`/api/orders/${orderId}/services`, {
