@@ -112,6 +112,7 @@ export async function getOrderById(id: number) {
           client: true,
         },
       },
+      client: true,
       mechanic: true,
       parts: true,
       services: true,

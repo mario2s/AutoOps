@@ -14,26 +14,29 @@ export default function AdminPage() {
     ]).then(([usersData, pendingData]) => {
       setUsers(usersData)
       setPending(pendingData)
+    }).catch(() => {
+      // ignore load errors, show empty state
+    }).finally(() => {
       setLoading(false)
     })
   }, [])
 
   const approve = async (id: number) => {
-    await fetch(`/api/users/${id}`, {
+    const res = await fetch(`/api/users/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'active' }),
     })
-    setPending(pending.filter((u) => u.id !== id))
+    if (res.ok) setPending(pending.filter((u) => u.id !== id))
   }
 
   const reject = async (id: number) => {
-    await fetch(`/api/users/${id}`, {
+    const res = await fetch(`/api/users/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'rejected' }),
     })
-    setPending(pending.filter((u) => u.id !== id))
+    if (res.ok) setPending(pending.filter((u) => u.id !== id))
   }
 
   if (loading) return <div className="text-center py-8">Loading...</div>

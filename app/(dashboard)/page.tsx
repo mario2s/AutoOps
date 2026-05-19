@@ -97,8 +97,8 @@ export default function DashboardPage() {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Mechanics</h2>
           <div className="space-y-3">
-            {stats.topMechanics.map((mechanic, i) => (
-              <div key={i} className="flex justify-between items-center">
+            {stats.topMechanics.map((mechanic) => (
+              <div key={mechanic.name} className="flex justify-between items-center">
                 <span className="text-gray-700">{mechanic.name}</span>
                 <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-semibold">
                   {mechanic.count} orders

@@ -7,19 +7,8 @@ function parseVersion(version: string): [number, number, number] {
 }
 
 function bumpVersion(version: string): string {
-  let [major, minor, patch] = parseVersion(version)
-
-  patch++
-  if (patch > 9) {
-    patch = 0
-    minor++
-    if (minor > 9) {
-      minor = 0
-      major++
-    }
-  }
-
-  return `${major}.${minor}.${patch}`
+  const [major, minor, patch] = parseVersion(version)
+  return `${major}.${minor}.${patch + 1}`
 }
 
 const versionFilePath = resolve(process.cwd(), 'lib/version.ts')

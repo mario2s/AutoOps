@@ -56,12 +56,12 @@ export default function InsightsPage() {
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Mechanics Performance</h2>
         <div className="space-y-3">
-          {stats.topMechanics.map((mechanic: any, i: number) => (
-            <div key={i} className="flex justify-between items-center">
+          {stats.topMechanics.map((mechanic: any) => (
+            <div key={mechanic.name} className="flex justify-between items-center">
               <span className="font-medium">{mechanic.name}</span>
               <div className="flex items-center gap-3">
                 <div className="w-32 bg-gray-200 rounded-full h-2">
-                  <div className="bg-indigo-600 h-2 rounded-full" style={{ width: `${(mechanic.count / stats.topMechanics[0].count) * 100}%` }} />
+                  <div className="bg-indigo-600 h-2 rounded-full" style={{ width: stats.topMechanics.length > 0 ? `${(mechanic.count / stats.topMechanics[0].count) * 100}%` : '0%' }} />
                 </div>
                 <span className="font-semibold w-12 text-right">{mechanic.count}</span>
               </div>

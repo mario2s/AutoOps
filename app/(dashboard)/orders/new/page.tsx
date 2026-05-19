@@ -81,7 +81,7 @@ export default function NewOrderPage() {
     try {
       const response = await fetch(`/api/clients/${clientId}/vehicles`)
       const data = await response.json()
-      setVehicles(data.vehicles || [])
+      setVehicles(Array.isArray(data) ? data : [])
     } catch (err) {
       console.error('Failed to load vehicles')
     }
